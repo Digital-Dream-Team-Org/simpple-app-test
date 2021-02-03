@@ -1,0 +1,5 @@
+mutation createNewsPost($title: String!, $content: String!) {
+  news: insert_news_one(object: { content: $content, title: $title }) {
+    ...News
+  }
+}

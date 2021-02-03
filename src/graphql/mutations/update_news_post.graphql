@@ -1,0 +1,5 @@
+mutation updateNewsPost($postId: uuid!, $newsPost: news_set_input!) {
+  news_post: update_news_by_pk(pk_columns: { id: $postId }, _set: $newsPost) {
+    ...News
+  }
+}

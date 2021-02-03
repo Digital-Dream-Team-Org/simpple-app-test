@@ -1,0 +1,27 @@
+version: '3.6'
+services:
+  front:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    container_name: CONTAINER_NAME-front
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.CONTAINER_NAME-front.entrypoints=http'
+      - 'traefik.http.routers.CONTAINER_NAME-front.rule=Host(`DOMAIN`)'
+      - 'traefik.http.middlewares.CONTAINER_NAME-front-https-redirect.redirectscheme.scheme=https'
+      - 'traefik.http.routers.CONTAINER_NAME-front.middlewares=CONTAINER_NAME-front-https-redirect'
+      - 'traefik.http.routers.CONTAINER_NAME-front-secure.entrypoints=https'
+      - 'traefik.http.routers.CONTAINER_NAME-front-secure.rule=Host(`DOMAIN`)'
+      - 'traefik.http.routers.CONTAINER_NAME-front-secure.tls=true'
+      - 'traefik.http.routers.CONTAINER_NAME-front-secure.tls.certresolver=http'
+      - 'traefik.http.routers.CONTAINER_NAME-front-secure.service=CONTAINER_NAME-front'
+      - 'traefik.http.services.CONTAINER_NAME-front.loadbalancer.server.port=80'
+    networks:
+      - net
+
+networks:
+  net:
+    external: true

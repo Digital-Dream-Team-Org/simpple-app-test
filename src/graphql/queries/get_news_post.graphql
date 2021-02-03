@@ -1,0 +1,5 @@
+query getNewsPost($postId: uuid!) {
+  news_post: news_by_pk(id: $postId) {
+    ...News
+  }
+}
